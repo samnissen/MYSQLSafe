@@ -17,7 +17,6 @@ module MYSQLSafe
 			sql = esc_enc_string(raw_sql)
 			if options["host"] && options["database"] && options["user"] && options["password"]
 				begin
-					options.each {|k,v| puts "#{k} => #{v}"}
 					@cxtn = Mysql.new(options[host], options[database], options[user], options[password])
 					table_names = get_table_names
 					table_match = match_name(table_names, sql)
