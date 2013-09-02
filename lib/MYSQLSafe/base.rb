@@ -3,7 +3,7 @@ require 'mysql'
 module MYSQLSafe
 	class Base
 		attr_accessor :encoding
-		attr_reader :host, :database, :user, :password
+		attr_reader :host, :database, :user
 		
 		def host=(host_string)
 			@host = esc_enc_string(host_string)
@@ -20,7 +20,7 @@ module MYSQLSafe
 		
 		def connect_safe(raw_sql)
 			sql = esc_enc_string(raw_sql)
-			if @host && @database && @user && password
+			if @host && @database && @user && @password
 				begin
 					@cxtn = Mysql.new(@host, @db, @user, @password)
 					table_names = get_table_names
