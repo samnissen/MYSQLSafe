@@ -1,7 +1,7 @@
 require 'mysql'
 
 module MYSQLSafe
-	class MYSQLSafe
+	class Base
 		attr_accessor :encoding
 		attr_reader :host, :database, :user, :password
 		
