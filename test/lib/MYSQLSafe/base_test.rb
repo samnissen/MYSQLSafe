@@ -3,32 +3,36 @@ require_relative '../../test_helper.rb'
 describe MYSQLSafe::Base do
 	
 	obj { MYSQLSafe::Base }
-	#@host && @database && @user && @password && @enconding
 	
-  it "must allow enconding to be set and read" do
+  it "should allow enconding to be set and read" do
 		enconding_name = 'utf-8'
 		obj.enconding = enconding_name
-		obj.enconding.must_equal enconding_name
+		obj.enconding.should_equal enconding_name
 	end
-  it "must allow username to be set and read" do
+  it "should allow username to be set and read" do
 		username = 'sam'
 		obj.user = username
-		obj.user.must_equal username
+		obj.user.should_equal username
 	end
-  it "must allow host to be set and read" do
+  it "should allow host to be set and read" do
 		hostname = 'localhost'
 		obj.host = hostname
-		obj.host.must_equal hostname
+		obj.host.should_equal hostname
 	end
-  it "must allow database to be set and read" do
+  it "should allow database to be set and read" do
 		database_name = 'test'
 		obj.database = database_name
-		obj.database.must_equal database_name
+		obj.database.should_equal database_name
 	end
+	
   it "must allow password to be set, but not read" do
-		password_key = 'password'
+		password_key = $MYSQLPASSWORD
 		obj.password = password_key
 		obj.password.must_be_kind_of Exception
 	end
 	
+  it "should allow connections to be made" do
+		obj.connect_safe("SELECT * FROM test LIMIT 1")
+		obj.database.should_be_type_of Array
+	end
 end
