@@ -1,5 +1,6 @@
 require "MYSQLSafe/version.rb"
+require "MYSQLSafe/base.rb"
 
 module MYSQLSafe
-  # Your code goes here...
+ 
 end
