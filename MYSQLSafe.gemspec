@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = MYSQLSafe::VERSION
   spec.authors       = ["Sam NIssen"]
   spec.email         = ["Samuel.Nissen@LinkShare.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Connect to MYSQL more easily}
+  spec.summary       = %q{An abstraction of the MYSQL gem to automatically close connections, return arrays and sanatize some of the inputs}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -20,4 +20,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
+  spec.add_dependency "mysql"
 end

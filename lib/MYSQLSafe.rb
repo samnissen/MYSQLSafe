@@ -1,4 +1,4 @@
-require "MYSQLSafe/version"
+require "MYSQLSafe/version.rb"
 
 module MYSQLSafe
   # Your code goes here...
