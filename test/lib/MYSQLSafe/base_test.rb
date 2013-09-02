@@ -2,37 +2,50 @@ require_relative '../../test_helper.rb'
 
 describe MYSQLSafe::Base do
 	
-	obj { MYSQLSafe::Base }
+	before do
+		@obj = MYSQLSafe::Base.new
+	end
 	
   it "should allow enconding to be set and read" do
-		enconding_name = 'utf-8'
-		obj.enconding = enconding_name
-		obj.enconding.should_equal enconding_name
+		encoding_name = 'utf-8'
+		@obj.encoding = encoding_name
+		@obj.encoding.must_equal encoding_name
 	end
   it "should allow username to be set and read" do
 		username = 'sam'
-		obj.user = username
-		obj.user.should_equal username
+		@obj.user = username
+		@obj.user.must_equal username
 	end
   it "should allow host to be set and read" do
 		hostname = 'localhost'
-		obj.host = hostname
-		obj.host.should_equal hostname
+		@obj.host = hostname
+		@obj.host.must_equal hostname
 	end
   it "should allow database to be set and read" do
 		database_name = 'test'
-		obj.database = database_name
-		obj.database.should_equal database_name
+		@obj.database = database_name
+		@obj.database.must_equal database_name
 	end
 	
-  it "must allow password to be set, but not read" do
-		password_key = $MYSQLPASSWORD
-		obj.password = password_key
-		obj.password.must_be_kind_of Exception
+  it "must allow password to be set and read" do
+		password_key = ENV['MYSQLPASSWORD'] || "password"
+		@obj.password = password_key
+		@obj.password.must_equal password_key
 	end
 	
-  it "should allow connections to be made" do
-		obj.connect_safe("SELECT * FROM test LIMIT 1")
-		obj.database.should_be_type_of Array
+  it "should allow connections to be made, and return an array" do
+		encoding_name = 'utf-8'
+		@obj.encoding = encoding_name
+		username = 'sam'
+		@obj.user = username
+		hostname = 'localhost'
+		@obj.host = hostname
+		database_name = 'test'
+		@obj.database = database_name
+		password_key = ENV['MYSQLPASSWORD'] || "password"
+		@obj.password = password_key
+		
+		success = @obj.connect_safe("SELECT * FROM test LIMIT 1")
+		success.must_be_instance_of Array
 	end
 end

@@ -2,27 +2,23 @@ require 'mysql'
 
 module MYSQLSafe
 	class Base
-		attr_accessor :encoding
-		attr_reader :host, :database, :user
-		
-		def host=(host_string)
-			@host = esc_enc_string(host_string)
-		end
-		def database=(database_string)
-			@database = esc_enc_string(database_string)
-		end
-		def user=(user_string)
-			@user = esc_enc_string(user_string)
-		end
-		def password=(password_string)
-			@password = esc_enc_string(password_string)
-		end
+		attr_accessor :host, :database, :user, :encoding, :password
 		
 		def connect_safe(raw_sql)
+			@mysql_array = []
+			@encoding ||= 'utf-8'
+			options = {}
+			self.instance_variables.map{|name| options = options.merge({ name.to_s.delete("@") => self.instance_variable_get(name) }) }
+			options.each do |k,v|
+				options[k] = esc_enc_string(v)
+			end
+			
+			
 			sql = esc_enc_string(raw_sql)
-			if @host && @database && @user && @password
+			if options["host"] && options["database"] && options["user"] && options["password"]
 				begin
-					@cxtn = Mysql.new(@host, @db, @user, @password)
+					options.each {|k,v| puts "#{k} => #{v}"}
+					@cxtn = Mysql.new(options[host], options[database], options[user], options[password])
 					table_names = get_table_names
 					table_match = match_name(table_names, sql)
 					
@@ -40,16 +36,19 @@ module MYSQLSafe
 					end
 					
 					mysql_object = cxtn.query(ticked_sql)
-					mysql_array = []
-					mysql_object.each { |row| mysql_array.push(row) }
-					
-					return mysql_array
+					mysql_object.each { |row| @mysql_array.push(row) }
+					puts "After push: #{@mysql_array}"
+				rescue Mysql::Error => msqle
+					puts "Error! #{msqle}, #{@mysql_array}"
+					@mysql_array.push(["MYSQL Error: #{msqle}"])
 				ensure
-					@cxtn.close
+					@cxtn.close if @cxtn
 				end
 			else
-				raise 'MYSQLSafe error: Host, Database, User and Password must be set to run a query'
+				raise "MYSQLSafe error: Host, Database, User and Password must be set to run a query. You included #{options}"
 			end
+			puts "@mysql_array is #{@mysql_array} a #{@mysql_array.class}"
+			return @mysql_array
 		end
 		
 		private
@@ -108,15 +107,16 @@ module MYSQLSafe
 		end
 		
 		def esc_enc_string(string)
-			return esc_string(enc_string(string))
+			return esc_string(enc_string(string.to_s))
 		end
 		
 		def enc_string(string)
-			return string.encode!("#{@encoding}", "#{@encoding}", :invalid => :replace)
+			return string.encode("#{@encoding}", "#{@encoding}", :invalid => :replace)
 		end
 		
 		def esc_string(string)
 			return Mysql.escape_string(string)
 		end
+		
 	end
 end
