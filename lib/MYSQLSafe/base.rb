@@ -17,7 +17,7 @@ module MYSQLSafe
 			sql = esc_enc_string(raw_sql)
 			if options["host"] && options["database"] && options["user"] && options["password"]
 				begin
-					@cxtn = Mysql.new(options[host], options[database], options[user], options[password])
+					@cxtn = Mysql.new(options["host"], options["user"], options["password"], options["database"])
 					table_names = get_table_names
 					table_match = match_name(table_names, sql)
 					
@@ -79,7 +79,7 @@ module MYSQLSafe
 			match = []
 			
 			name_array.each do |name|
-				match.push(name) if sql.to_s.include?("#{name}=") || sql.to_s.match?(/#{name}\s+=/) || sql.to_s.match?(/#{name}`\s+=/)
+				match.push(name) if sql.to_s.include?("#{name}=") || sql.to_s[/#{name}\s+=/] || sql.to_s[/#{name}`\s+=/]
 			end
 			
 			if match.size > 0
