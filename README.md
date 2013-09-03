@@ -32,16 +32,21 @@ MYSQLSafe allows you to optionally set
 + password
 + encoding
 
+
 		safe_sql_connect = MYSQLSafe::Base.new()
 		safe_sql_connect.user = 'username'
 		safe_sql_connect.host = 'myhost'
 		safe_sql_connect.password = ENV['MYSQLPASSWORD']
 		safe_sql_connect.database = 'databasename'
-		safe_sql_connect.encoding = 'iso-8859-1' # otherwise defaults to utf-8
+		safe_sql_connect.encoding = 'iso-8859-1' # otherwise defaults to 'utf-8'
 
 MYSQLSafe has one other public function which allows you to pass a MYSQL query
 
 		safe_sql_connect.connect_safe("SELECT * FROM tablename LIMIT 1;")
+
+And it returns an Array
+		
+		#=> [["1", "Sam", "Areas Of My Expertise"], ["2", "Caz", "1Q84"], ["3", "Kyle", "How I Became A Famous Novelist"]]
 
 ## Contributing
 
