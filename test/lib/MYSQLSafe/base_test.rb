@@ -45,7 +45,7 @@ describe MYSQLSafe::Base do
 		password_key = ENV['MYSQLPASSWORD'] || "password"
 		@obj.password = password_key
 		
-		success = @obj.connect_safe("SELECT * FROM test LIMIT 1")
+		success = @obj.connect_safe("SELECT * FROM performance_test LIMIT 1")
 		success.must_be_instance_of Array
 	end
 end
