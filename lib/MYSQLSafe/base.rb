@@ -69,7 +69,7 @@ module MYSQLSafe
 				column_names_results_sql = @cxtn.query(column_names_sql)
 			
 				column_names_results_sql.each do |name|
-					column_names.push(name)
+					column_names.push(name[0])
 				end
 			end
 			

@@ -1,6 +1,8 @@
 require_relative '../../test_helper.rb'
 
 describe MYSQLSafe::Base do
+
+	help = TestHelpers.new()
 	
 	before do
 		@obj = MYSQLSafe::Base.new
@@ -34,18 +36,14 @@ describe MYSQLSafe::Base do
 	end
 	
   it "should allow connections to be made, and return an array" do
-		encoding_name = 'utf-8'
-		@obj.encoding = encoding_name
-		username = 'sam'
-		@obj.user = username
-		hostname = 'localhost'
-		@obj.host = hostname
-		database_name = 'test'
-		@obj.database = database_name
-		password_key = ENV['MYSQLPASSWORD'] || "password"
-		@obj.password = password_key
-		
+		@obj = help.set_variables(@obj)
 		success = @obj.connect_safe("SELECT * FROM performance_test LIMIT 1")
+		success.must_be_instance_of Array
+	end
+	
+  it "should allow table=value syntax" do
+		@obj = help.set_variables(@obj)
+		success = @obj.connect_safe("SELECT * FROM performance_test WHERE test_int=1 LIMIT 1")
 		success.must_be_instance_of Array
 	end
 end
