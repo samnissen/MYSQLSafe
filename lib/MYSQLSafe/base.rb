@@ -52,10 +52,10 @@ module MYSQLSafe
 		private
 		def tick_sql(sql, table_array, column_array)
 			ticked_sql = sql.delete("`")
-			table_array.each do |name|
+			table_array.uniq.each do |name|
 				ticked_sql = ticked_sql.gsub(name, "`#{name}`")
 			end
-			column_array.each do |col|
+			column_array.uniq.each do |col|
 				ticked_sql = ticked_sql.gsub(col, "`#{col}`")
 			end
 			

@@ -38,12 +38,28 @@ describe MYSQLSafe::Base do
   it "should allow connections to be made, and return an array" do
 		@obj = help.set_variables(@obj)
 		success = @obj.connect_safe("SELECT * FROM performance_test LIMIT 1")
+		success.to_s.wont_include "MYSQL Error"
 		success.must_be_instance_of Array
 	end
 	
   it "should allow table=value syntax" do
 		@obj = help.set_variables(@obj)
 		success = @obj.connect_safe("SELECT * FROM performance_test WHERE test_int=1 LIMIT 1")
+		success.to_s.wont_include "MYSQL Error"
+		success.must_be_instance_of Array
+	end
+	
+  it "should allow mysql ticking" do
+		@obj = help.set_variables(@obj)
+		success = @obj.connect_safe("SELECT * FROM `performance_test` WHERE `test_int` = 1 LIMIT 1")
+		success.to_s.wont_include "MYSQL Error"
+		success.must_be_instance_of Array
+	end
+	
+  it "should allow column selection" do
+		@obj = help.set_variables(@obj)
+		success = @obj.connect_safe("SELECT `test_int`, `test_varchar` FROM `performance_test` WHERE `test_int` = 1 LIMIT 1")
+		success.to_s.wont_include "MYSQL Error"
 		success.must_be_instance_of Array
 	end
 end
