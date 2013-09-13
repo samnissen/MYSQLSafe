@@ -78,9 +78,16 @@ module MYSQLSafe
 
 		def match_name(name_array, sql)
 			match = []
-			
+			arrayable_sql = sql
+		
 			name_array.each do |name|
-				match.push(name) if sql.to_s.include?("#{name}")
+				containing_characters = ["\"", "'", "`", ",", "(", ")", ".", "=", ";"]
+				containing_characters.each do |illegal|
+					arrayable_sql = arrayable_sql.gsub(illegal, ' ')
+				end
+				arrayable_sql.split(" ").each do |word|
+					match.push(name) if word == "#{name.strip}"
+				end
 			end
 			
 			if match.size > 0
