@@ -4,6 +4,7 @@ require File.expand_path('../../lib/MYSQLSafe.rb', __FILE__)
 
 class TestHelpers
 	attr_accessor :encoding_name, :hostname_name, :user_name, :database_name, :password_name
+	
 	def set_encoding(obj)
 		@encoding_name = 'utf-8'
 		obj.encoding = @encoding_name
@@ -20,7 +21,7 @@ class TestHelpers
 		return obj
 	end
 	def set_database(obj)
-		@database_name = 'test'
+		@database_name = 'test_mysql'
 		obj.database = @database_name
 		return obj
 	end

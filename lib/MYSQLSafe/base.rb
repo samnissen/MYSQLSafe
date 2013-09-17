@@ -15,39 +15,50 @@ module MYSQLSafe
 			
 			
 			sql = esc_enc_string(raw_sql)
-			if options["host"] && options["database"] && options["user"] && options["password"]
-				begin
-					@cxtn = Mysql.new(options["host"], options["user"], options["password"], options["database"])
-					table_names = get_table_names
-					table_match = match_name(table_names, sql)
-					
-					if table_match
-						column_names = get_column_names(table_match)
-						column_match = match_name(column_names, sql)
-						column_match = [] if !(sql.to_s.downcase.include?('where'))
+			begin
+				case
+					when options["host"], options["user"], options["password"], options["database"]
+						@cxtn = Mysql.new(options["host"], options["user"], options["password"], options["database"])
+					when options["host"], options["user"], options["password"]
+						@cxtn = Mysql.new(options["host"], options["user"], options["password"])
+					when options["host"], options["user"]
+						@cxtn = Mysql.new(options["host"], options["user"])
 					else
-						raise 'MYSQLSafe error: no valid table name could be found in your SQL statement'
-					end
-					
-					if column_match
-						ticked_sql = tick_sql(sql, table_match, column_match)
-					else
-						raise 'MYSQLSafe error: no valid column name(s) could be found in your SQL statement'
-					end
-					
-					mysql_object = @cxtn.query(ticked_sql)
-					mysql_object.each { |row| @mysql_array.push(row) }
-				rescue Mysql::Error => msqle
-					puts "Error! #{msqle}, #{@mysql_array}"
-					@mysql_array.push(["MYSQL Error: #{msqle}"])
-				ensure
-					@cxtn.close if @cxtn
+						raise "MYSQLSafe error: In order to connect to MYSQL you must at least set the host and username. So far you have included #{options}."
 				end
-			else
-				raise "MYSQLSafe error: Host, Database, User and Password must be set to run a query. You included #{options}"
+				
+				table_names = get_table_names
+				table_match = match_name(table_names, sql)
+				
+				if table_match
+					column_names = get_column_names(table_match)
+					column_match = match_name(column_names, sql)
+					column_match = [] if !(sql.to_s.downcase.include?('where'))
+				else
+					raise 'MYSQLSafe error: no valid table name could be found in your SQL statement'
+				end
+				
+				if column_match
+					ticked_sql = tick_sql(sql, table_match, column_match)
+				else
+					raise 'MYSQLSafe error: no valid column name(s) could be found in your SQL statement'
+				end
+				
+				mysql_object = @cxtn.query(ticked_sql)
+				mysql_object.each { |row| @mysql_array.push(row) } if mysql_object
+				unless @mysql_array.size > 0
+					@mysql_array = ["Success, with 'nil' result"] 
+				end
+			rescue Mysql::Error => msqle
+				puts "Error! #{msqle}, #{@mysql_array}"
+				@mysql_array.push(["MYSQL Error: #{msqle}"])
+			ensure
+				@cxtn.close if @cxtn
 			end
+			
 			return @mysql_array
-		end
+				
+			end
 
 		private
 		def tick_sql(sql, table_array, column_array)
