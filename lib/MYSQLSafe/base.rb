@@ -14,7 +14,7 @@ module MYSQLSafe
 			end
 			
 			
-			sql = esc_enc_string(raw_sql)
+			sql = enc_string(raw_sql)
 			begin
 				case
 					when options["host"], options["user"], options["password"], options["database"]
