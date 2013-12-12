@@ -21,7 +21,7 @@ class TestHelpers
 		return obj
 	end
 	def set_database(obj)
-		@database_name = 'test_mysql'
+		@database_name = 'gem_test_mysqlsafe'
 		obj.database = @database_name
 		return obj
 	end
