@@ -14,7 +14,7 @@ describe MYSQLSafe::Base do
 		@obj.encoding.must_equal encoding_name
 	end
   it "should allow username to be set and read" do
-		username = 'sam'
+		username = ENV['MYSQLUSERNAME']
 		@obj.user = username
 		@obj.user.must_equal username
 	end
@@ -24,7 +24,7 @@ describe MYSQLSafe::Base do
 		@obj.host.must_equal hostname
 	end
   it "should allow database to be set and read" do
-		database_name = 'test_mysql'
+		database_name = 'gem_test_mysqlsafe'
 		@obj.database = database_name
 		@obj.database.must_equal database_name
 	end

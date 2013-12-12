@@ -11,7 +11,7 @@ class TestHelpers
 		return obj
 	end
 	def set_user(obj)
-		@user_name = 'sam'
+		@user_name = ENV['MYSQLUSERNAME']
 		obj.user = @user_name
 		return obj
 	end
