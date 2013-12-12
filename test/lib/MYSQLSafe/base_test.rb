@@ -75,6 +75,12 @@ describe MYSQLSafe::Base do
 		success = @obj.connect_safe("SELECT `test_int`, `test_varchar` FROM `gem_test_mysqlsafe`.`performance_test` WHERE `test_int` = 1 ORDER BY `test_int` LIMIT 1")
 		success.to_s.wont_include "MYSQL Error"
 		success.must_be_instance_of Array
+	end	
+  it "should allow order by direction indication" do
+		@obj = help.set_variables(@obj)
+		success = @obj.connect_safe("SELECT `test_int`, `test_varchar` FROM `gem_test_mysqlsafe`.`performance_test` WHERE `test_int` = 1 ORDER BY `test_int` DESC LIMIT 1")
+		success.to_s.wont_include "MYSQL Error"
+		success.must_be_instance_of Array
 	end
 	
   it "should allow insert into syntax" do
