@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["Samuel.Nissen@LinkShare.com"]
   spec.description   = %q{Connect to MYSQL more easily}
   spec.summary       = %q{An abstraction of the MYSQL gem to automatically close connections, return arrays and sanatize some of the inputs}
-  spec.homepage      = ""
+  spec.homepage      = "https://rubygems.org/gems/MYSQLSafe"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
@@ -19,6 +19,11 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.3"
-  spec.add_development_dependency "rake"
-  spec.add_dependency "mysql"
+  spec.add_development_dependency "rake", "~> 0"
+  spec.add_dependency "mysql", "~> 0"
+  spec.add_dependency "mysql-client", "~> 0"
+  spec.add_dependency "libmysqlclient-dev", "~> 0"
+
+  spec.add_runtime_dependency "bundler", "~> 1.3"
+  spec.add_runtime_dependency "rake", "~> 0"
 end
